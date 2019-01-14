@@ -1,0 +1,106 @@
+import java.util.Arrays;
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        String[] strings = new String[]{"dsad", "dsadas", "cxzxczxc"};
+
+        Swap.swap(strings, 0, 2);
+        System.out.println(Arrays.toString(strings));
+        Box<Orange> orangeBox=new Box<>();
+        for (int i = 0; i < 10; i++) {
+            orangeBox.add(new Orange());
+        }
+        Box<Orange> oragneBoxTwo=new Box<>();
+        for (int i = 0; i < 5; i++) {
+            oragneBoxTwo.add(new Orange());
+        }
+        Box<Apple> appleBox=new Box<>();
+        for (int i = 0; i < 10; i++) {
+            appleBox.add(new Apple());
+        }
+        System.out.println(orangeBox.getWeight());
+        orangeBox.putInBox(oragneBoxTwo);
+        System.out.println(orangeBox.getWeight());
+        System.out.println(oragneBoxTwo.getWeight());
+        System.out.println(orangeBox.compare(appleBox));
+
+    }
+}
+public class Swap {
+    public static void swap(Object[] arr, int sourceIndex, int destinationIndex){
+        if (!(sourceIndex>=0 && sourceIndex<arr.length && destinationIndex>=0 && destinationIndex<arr.length)){
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        Object temp=arr[sourceIndex];
+        arr[sourceIndex]=arr[destinationIndex];
+        arr[destinationIndex]=temp;
+    }
+}
+
+public abstract class Fruit {
+    private float weight;
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+}
+public class Apple extends Fruit {
+    private String name = "Apple";
+    public Apple() {
+        super();
+        this.setWeight(1.0f);
+    }
+}
+public class Orange extends Fruit {
+    private String name="Orange";
+    public Orange() {
+        super();
+        this.setWeight(1.5f);
+    }
+}
+import java.util.ArrayList;
+
+public class Box<T extends Fruit> {
+    private ArrayList<T> fruitList;
+
+    public Box() {
+        this.fruitList = new ArrayList<>();
+    }
+
+    public float getWeight() {
+        if (fruitList.isEmpty()) {
+            return 0f;
+        }
+
+        float boxWeight = 0f;
+        for (T fruit : fruitList) {
+            boxWeight += fruit.getWeight();
+        }
+        return boxWeight;
+    }
+
+    public void add(T fruit) {
+        this.fruitList.add(fruit);
+    }
+
+    public boolean compare(Box<? extends Fruit> anotherBox) {
+        return this.getWeight() == anotherBox.getWeight();
+    }
+
+    public void putInBox(Box<T> boxOutput) {
+        if (this.equals(boxOutput)) {
+            return;
+        }
+        for (int i = 0; i < fruitList.size(); i++) {
+            boxOutput.add(fruitList.get(i));
+        }
+        fruitList.clear();
+    }
+}
+
+
